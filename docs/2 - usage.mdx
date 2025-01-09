@@ -1,0 +1,150 @@
+import {C4Diagram, C4NodeType} from "@c4mjs/c4-react";
+
+# Usage
+
+To get started with C4MJS, you need to install the package from NPM along with xyflow/react:
+
+```shell
+npm install @xyflow/react @c4mjs/c4-react
+```
+
+Before diving in we need to import the stylesheets.
+
+In your applications entrypoint add the following:
+
+```shell
+import "@xyflow/react/dist/style.css";
+import "@c4mjs/c4-react/dist/main.css";
+```
+
+With that in place, you can start creating your C4 diagrams.
+
+## Example
+
+### Define a system
+
+Before rendering a view you need to define a system. Here's an example of a system definition:
+
+```typescript
+import {C4NodeType, C4System } from "@c4mjs/c4-react";
+
+export const personalBankingCustomer: C4System = {
+	id: crypto.randomUUID(),
+	name: "Personal banking customer",
+	description: "A customer of the bank, with personal bank accounts.",
+	type: C4NodeType.System,
+};
+
+
+export const internetBankingSystem: C4System = {
+	id: crypto.randomUUID(),
+	name: "Internet Banking System",
+	description:
+		"Allows customers to view information about their bank accounts, and make payments.",
+	type: C4NodeType.System,
+};
+
+```
+
+These systems can be referenced in your diagrams and re-used by many views.
+
+
+### Render a View
+
+
+A view is a collection of Relationships between Systems. Here's an example of a relationship:
+
+```typescript
+const relationship = [personalBankingCustomer, "Views account balances, and makes payments using", internetBankingSystem]
+```
+
+To define a view, bring all the components together:
+
+```typescript jsx
+import {C4Diagram} from "@c4mjs/c4-react";
+
+<C4Diagram
+        model={[relationship]}
+        positions={[]}
+    />
+```
+
+
+### Result
+
+All going well you should have a view that looks similar to this:
+
+export const personalBankingCustomer = {
+    id: "1",
+    name: "Personal banking customer",
+    description: "A customer of the bank, with personal bank accounts.",
+    type: C4NodeType.System,
+};
+
+export const internetBankingSystem = {
+    id: "2",
+    name: "Internet Banking System",
+    description:
+        "Allows customers to view information about their bank accounts, and make payments.",
+    type: C4NodeType.System,
+};
+
+
+export const relationship = [personalBankingCustomer,"Views account balances, and makes payments using",internetBankingSystem, "", {}]
+
+<div style={{ width: "100%", height: 500 }}>
+    <C4Diagram
+        model={[relationship]}
+        positions={[]}
+    />
+</div>
+
+### Full Code Snippet
+
+As you can see all the C4Diagram component needs is an Array of Relationships to render a view:
+
+These can either be created via code as in the example below or programmatically generated from a higher store.
+
+```typescript
+import {C4NodeType,C4System, C4Diagram} from "@c4mjs/c4-react";
+
+export const personalBankingCustomer: C4System = {
+	id: crypto.randomUUID(),
+	name: "Personal banking customer",
+	description: "A customer of the bank, with personal bank accounts.",
+	type: C4NodeType.System,
+};
+
+export const internetBankingSystem: C4System = {
+	id: crypto.randomUUID(),
+	name: "Internet Banking System",
+	description:
+		"Allows customers to view information about their bank accounts, and make payments.",
+	type: C4NodeType.System,
+};
+
+export const relationship = [personalBankingCustomer,"Views account balances, and makes payments using",internetBankingSystem]
+
+<div style={{ width: "100%", height: 500 }}>
+    <C4Diagram model={[relationship]} />
+</div>
+```
+
+## Positioning
+
+By default, the C4Diagram will attempt to position the nodes in a grid layout. If you want to specify the positions of the nodes you can do so by passing an array of positions to the `positions` prop.
+
+```typescript
+positions?: [C4Node, Row, Col][];
+```
+
+The `positions` prop takes an array of tuples where the first element is the node you want to position, the second element is the row and the third element is the column.
+
+```typescript
+const positions = [
+    [personalBankingCustomer, 0, 0],
+    [internetBankingSystem, 1, 0],
+]
+```
+
+See the System Context Diagram for an example of this in action.

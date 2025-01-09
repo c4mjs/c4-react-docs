@@ -1,0 +1,56 @@
+---
+sidebar_position: 1
+---
+import {emailSystem, internetBankingSystem, mainframe, personalBankingCustomer} from "./workspace";
+import {C4Diagram} from "@c4mjs/c4-react";
+
+# Intro
+
+`@c4mjs/c4-react` is a library for creating C4 diagrams in React.
+
+It uses React Flow for rendering the diagrams, giving interactive canvases that can be used in any React application.
+
+The interactive zooming and panning features of React Flow make it easy to create and view large diagrams.
+
+## Example Uses
+
+- Embedded diagrams in technical documentation
+- Building a custom System Catalogue
+- Creating a single source of truth for your architecture diagrams and decision records
+
+## Features
+
+- Reusable Component Definitions in Javascript/Typescript 🛠️
+- Manage **_Workspaces_** using Javascript ecosystem tools like NPM 📦
+- Embed C4 diagrams in your React applications 🚀
+- Downloadable 📥 diagrams using [html-to-image](https://www.npmjs.com/package/html-to-image) & [downloadjs](https://www.npmjs.com/package/downloadjs)
+- Supports Light 🌞 and Dark 🌚 themes out of the box
+
+## Example
+
+You can see a live example of a system context diagram below, unlock the canvas to move nodes around.
+
+<div style={{ width: "100%", height: 500 }}>
+    <C4Diagram
+        model={[
+            [
+                personalBankingCustomer,
+                "Views account balances, and makes payments using",
+                internetBankingSystem,
+            ],
+            [
+                internetBankingSystem,
+                "Gets account information from, and makes payments using",
+                mainframe,
+            ],
+            [internetBankingSystem, "Sends e-mail using", emailSystem],
+            [emailSystem, "Sends e-mails to", personalBankingCustomer],
+        ]}
+        positions={[
+            [personalBankingCustomer, 0, 0],
+            [internetBankingSystem, 1, 0],
+            [mainframe, 2, 0],
+            [emailSystem, 1, 1],
+        ]}
+    />
+</div>

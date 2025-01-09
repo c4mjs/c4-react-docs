@@ -1,0 +1,105 @@
+---
+sidebar_position: 3
+---
+
+import {C4Diagram} from "@c4mjs/c4-react";
+import {emailSystem, internetBankingSystem, mainframe, personalBankingCustomer} from "./workspace";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# System Context
+
+The C4 model's "System Context" diagram provides a high-level overview of a software system, illustrating its interactions with users and external systems. This diagram positions the system centrally, surrounded by its users and other interacting systems, emphasizing people and software systems over technical details.  In the C4 model, a "Software System" represents the highest level of abstraction, encompassing something that delivers value to its users, whether human or not. This includes the system being modeled and any other systems it depends on or that depend on it.
+
+:::info
+
+https://c4model.com/abstractions/software-system
+
+https://c4model.com/diagrams/system-context
+:::
+
+## Example
+
+<Tabs>
+    <TabItem value={"Preview"}>
+        <div style={{ width: "100%", height: 700 }}>
+            <C4Diagram
+                model={[
+                    [
+                        personalBankingCustomer,
+                        "Views account balances, and makes payments using",
+                        internetBankingSystem,
+                    ],
+                    [
+                        internetBankingSystem,
+                        "Gets account information from, and makes payments using",
+                        mainframe,
+                    ],
+                    [internetBankingSystem, "Sends e-mail using", emailSystem],
+                    [emailSystem, "Sends e-mails to", personalBankingCustomer],
+                ]}
+                positions={[
+                    [personalBankingCustomer, 0, 0],
+                    [internetBankingSystem, 1, 0],
+                    [mainframe, 2, 0],
+                    [emailSystem, 1, 1],
+                ]}
+            />
+        </div>
+    </TabItem>
+
+    <TabItem value={"Code"}>
+
+```typescript jsx
+import { C4System } from "@c4mjs/c4-react";
+
+export const personalBankingCustomer: C4System = {
+    id: crypto.randomUUID(),
+    name: "Personal banking customer",
+    description: "A customer of the bank, with personal bank accounts.",
+    type: C4NodeType.System,
+};
+
+    export const internetBankingSystem: C4System = {
+    id: crypto.randomUUID(),
+    name: "Internet Banking System",
+    description:
+    "Allows customers to view information about their bank accounts, and make payments.",
+    type: C4NodeType.System,
+};
+
+    export const mainframe: C4System = {
+    id: crypto.randomUUID(),
+    name: "Mainframe",
+    description:
+    "Stores all of the core banking information about customers, accounts, transactions, etc.",
+    type: C4NodeType.System,
+    external: true,
+};
+
+    export const emailSystem: C4System = {
+    id: crypto.randomUUID(),
+    name: "Email System",
+    description: "The internal Microsoft Exchange e-mail system.",
+    type: C4NodeType.System,
+};
+
+<div style={{ display: "flex", flex: "1 1 auto" }}>
+    <C4Diagram
+        model={[
+            [personalBankingCustomer, "Views account balances, and makes payments using", internetBankingSystem],
+            [internetBankingSystem, "Gets account information from, and makes payments using", mainframe],
+            [internetBankingSystem, "Sends e-mail using", emailSystem],
+            [emailSystem, "Sends e-mails to", personalBankingCustomer],
+        ]}
+        positions={[
+            [personalBankingCustomer, 0, 0],
+            [internetBankingSystem, 1, 0],
+            [mainframe, 2, 0],
+            [emailSystem, 1, 1],
+        ]}
+    />
+</div>
+```
+    </TabItem>
+</Tabs>
